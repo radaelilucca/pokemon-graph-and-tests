@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apolloClient } from "../../services/apollo";
+import { getRandomIntInRange } from "../../utils";
 import { PokemonDetailsType, PokemonDTOType, PokemonStateType } from "./types";
 
 const POKEMON_REDUCER_NAME = "pokemon";
@@ -23,10 +24,13 @@ const getPokemonByIdQuery = gql`
 const getRandomPokemon = createAsyncThunk(
   `${POKEMON_REDUCER_NAME}/getRandomPokemon`,
   async () => {
-    const minId = 1;
-    const maxId = 905;
+    const firstPokemonId = 1;
+    const lastPokemonId = 905;
 
-    const randomId = Math.floor(Math.random() * (maxId - minId) + minId);
+    const randomId = getRandomIntInRange({
+      min: firstPokemonId,
+      max: lastPokemonId,
+    });
 
     const response = await apolloClient.query({
       query: getPokemonByIdQuery,
