@@ -1,4 +1,3 @@
-import { gql, useQuery } from "@apollo/client";
 import { HomePage } from "./pages/Home";
 
 function App() {
