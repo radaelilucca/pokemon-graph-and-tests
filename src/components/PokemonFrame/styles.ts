@@ -23,41 +23,43 @@ export const Container = styled.div`
   }
 `;
 
+export const TypesBackgroundsContainer = styled.div`
+  position: absolute;
+
+  height: 150%;
+  width: 150%;
+
+  z-index: 2;
+
+  transform: rotate(135deg);
+`;
+
 interface ITypesBgProps {
-  backgroundColors: string[];
+  backgroundColor: string;
 }
 
 export const TypesBackground = styled.div<ITypesBgProps>`
   position: absolute;
 
-  z-index: 2;
+  height: 200%;
+  width: 200%;
+
+  opacity: 1;
+`;
+
+export const FirstTypeBackground = styled(TypesBackground)`
+  right: 49%;
+
+  height: 200%;
+  width: 200%;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+`;
+
+export const SecondTypeBackground = styled(TypesBackground)`
+  left: 49%;
 
   height: 100%;
   width: 100%;
 
-  transform: rotate(135deg);
-
-  opacity: 1;
-
-  &:after {
-    position: absolute;
-    content: "";
-    height: 200%;
-    width: 200%;
-    background-color: ${({ backgroundColors }) =>
-      backgroundColors.length === 1 ? backgroundColors : backgroundColors[0]};
-
-    bottom: 49%;
-  }
-
-  &:before {
-    position: absolute;
-    content: "";
-    height: 200%;
-    width: 200%;
-    background-color: ${({ backgroundColors }) =>
-      backgroundColors.length === 1 ? backgroundColors : backgroundColors[1]};
-
-    top: 49%;
-  }
+  background-color: ${({ backgroundColor }) => backgroundColor};
 `;

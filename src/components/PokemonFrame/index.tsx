@@ -2,13 +2,24 @@ import { useEffect, useRef } from "react";
 import { pokemonTypesColors } from "../../const";
 import { PokemonTypes } from "../../state";
 import { ConditionalRender } from "../ConditionalRenderer";
-import { Container, TypesBackground } from "./styles";
+import {
+  Container,
+  FirstTypeBackground,
+  SecondTypeBackground,
+  TypesBackgroundsContainer,
+} from "./styles";
 
 interface IPokemonFrameProps {
   id: number;
   types: PokemonTypes[];
   isLoading: boolean;
 }
+
+export const PokemonFrameTestIds = {
+  container: "PokemonFrameContainer",
+  firstTypeBackground: "PokemonFrameFirstBackground",
+  secondTypeBackground: "PokemonFrameSecondBackground",
+};
 
 const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
   const backgroundColors = types
@@ -26,9 +37,17 @@ const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
   }, [isLoading]);
 
   return (
-    <Container>
-      <TypesBackground backgroundColors={backgroundColors} />
-
+    <Container data-testid={PokemonFrameTestIds.container}>
+      <TypesBackgroundsContainer>
+        <FirstTypeBackground
+          data-testid={PokemonFrameTestIds.firstTypeBackground}
+          backgroundColor={backgroundColors[0]}
+        />
+        <SecondTypeBackground
+          data-testid={PokemonFrameTestIds.secondTypeBackground}
+          backgroundColor={backgroundColors[1] || backgroundColors[0]}
+        />
+      </TypesBackgroundsContainer>
       <ConditionalRender condition={!isLoading}>
         <img
           ref={imageRef}
