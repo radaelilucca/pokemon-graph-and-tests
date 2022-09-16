@@ -16,7 +16,8 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "vite-plugin-svgr": "^2.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
