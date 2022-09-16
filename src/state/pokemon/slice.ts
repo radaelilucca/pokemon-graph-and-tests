@@ -21,45 +21,104 @@ const getPokemonByIdQuery = gql`
   }
 `;
 
-const getRandomPokemon = createAsyncThunk(
-  `${POKEMON_REDUCER_NAME}/getRandomPokemon`,
-  async () => {
-    const firstPokemonId = 1;
-    const lastPokemonId = 905;
+const getPokemonByNameQuery = gql`
+  query getPokemonById($name: String!) {
+    pokemon_v2_pokemon(where: { name: { _ilike: $name } }) {
+      id
+      name
+      pokemon_v2_pokemontypes {
+        id
+        pokemon_v2_type {
+          name
+        }
+      }
+    }
+  }
+`;
 
-    const randomId = getRandomIntInRange({
-      min: firstPokemonId,
-      max: lastPokemonId,
-    });
+const getRandomPokemon = async () => {
+  const firstPokemonId = 1;
+  const lastPokemonId = 905;
 
-    const response = await apolloClient.query({
-      query: getPokemonByIdQuery,
-      variables: {
-        id: randomId,
-      },
-    });
+  console.log("GET RAMNDOM");
 
-    const { pokemon_v2_pokemon_by_pk } = response.data;
+  const randomId = getRandomIntInRange({
+    min: firstPokemonId,
+    max: lastPokemonId,
+  });
 
-    const pokemonData = pokemon_v2_pokemon_by_pk as PokemonDTOType;
+  const response = await apolloClient.query({
+    query: getPokemonByIdQuery,
+    variables: {
+      id: randomId,
+    },
+  });
+  const { pokemon_v2_pokemon_by_pk } = response.data;
 
-    const { id, name, pokemon_v2_pokemontypes } = pokemonData;
+  const pokemonData = pokemon_v2_pokemon_by_pk as PokemonDTOType;
 
-    const newPokemon: PokemonDetailsType = {
-      id,
-      name,
-      types: pokemon_v2_pokemontypes.map(
-        (typeItem: any) => typeItem.pokemon_v2_type.name
-      ),
-    };
+  return pokemonData;
+};
 
-    return newPokemon;
+const getPokemonByName = async ({ pokemonName }: { pokemonName: string }) => {
+  const response = await apolloClient.query({
+    query: getPokemonByNameQuery,
+    variables: {
+      name: pokemonName,
+    },
+  });
+
+  const { pokemon_v2_pokemon } = response.data;
+  const pokemons = pokemon_v2_pokemon as PokemonDTOType[];
+  const [pokemonData] = pokemons;
+
+  return pokemonData;
+};
+
+interface IGetPokemonProps {
+  pokemonName?: string;
+}
+
+const getPokemon = createAsyncThunk(
+  `${POKEMON_REDUCER_NAME}/getPokemon`,
+  async ({ pokemonName }: IGetPokemonProps) => {
+    try {
+      const pokemonData = pokemonName
+        ? await getPokemonByName({ pokemonName })
+        : await getRandomPokemon();
+
+      const { id, name, pokemon_v2_pokemontypes } = pokemonData;
+
+      const newPokemon: PokemonDetailsType = {
+        id,
+        name,
+        types: pokemon_v2_pokemontypes.map(
+          (typeItem: any) => typeItem.pokemon_v2_type.name
+        ),
+      };
+
+      return newPokemon;
+    } catch (error) {
+      throw new Error("Pokemon not found");
+    }
+  },
+  {
+    // NOTE: ABORT DUPLICATED REQUESTS
+    condition: (_, { getState }) => {
+      type GetStateData = {
+        pokemonState: PokemonStateType;
+      };
+      const { pokemonState } = getState() as GetStateData;
+
+      return !pokemonState.isLoading;
+    },
   }
 );
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   pokemon: {} as PokemonDetailsType,
+  error: "",
 } as PokemonStateType;
 
 export const pokemonSlice = createSlice({
@@ -67,17 +126,24 @@ export const pokemonSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getRandomPokemon.pending, (state) => {
+    builder.addCase(getPokemon.pending, (state, ...props) => {
       state.isLoading = true;
+      state.error = "";
     });
 
-    builder.addCase(getRandomPokemon.fulfilled, (state, { payload }) => {
+    builder.addCase(getPokemon.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.pokemon = payload;
+      state.error = "";
+    });
+
+    builder.addCase(getPokemon.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = "Pokemon not found";
     });
   },
 });
 
-export { getRandomPokemon };
+export { getPokemon };
 
 export const pokemonReducer = pokemonSlice.reducer;
