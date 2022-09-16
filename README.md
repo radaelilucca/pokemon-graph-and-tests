@@ -35,7 +35,7 @@ You can try the live version here: [pokemon.radaeli.dev](https://pokemon.radaeli
   <img width="64" height="64" src="/assets/icons/styled.png" alt="Styled Components logo"/>
 </a>
 <a href="https://redux.js.org/">
-  <img width="64" height="64" src="/assets/icons/redux.png" alt="Recoil logo"/>
+  <img width="64" height="64" src="/assets/icons/redux.png" alt="Redux logo"/>
 </a>
 <a href="https://jestjs.io/">
   <img width="64" height="64" src="/assets/icons/jest.png" alt="Jest logo"/>
