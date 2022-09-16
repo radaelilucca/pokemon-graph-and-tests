@@ -3,30 +3,96 @@
  */
 
 import { describe, expect, it } from "@jest/globals";
-import { render } from "@testing-library/react";
+import { render, cleanup } from "@testing-library/react";
 
 import { PokemonFrame, PokemonFrameTestIds } from ".";
 import { pokemonTypesColors } from "../../const";
 import { PokemonTypes } from "../../state";
+import { hexToRGB } from "../../utils";
 
 describe("[Component] - Pokemon Frame", () => {
-  it("Should render backgrounds with type colors", () => {
-    const types: PokemonTypes[] = ["electric", "poison"];
+  describe("Types backgrounds", () => {
+    it("Should render background with two colors / two types", () => {
+      const types: PokemonTypes[] = ["electric", "poison"];
 
-    const { electric: electricColor, poison: poisonColor } = pokemonTypesColors;
+      const { electric: electricColor, poison: poisonColor } =
+        pokemonTypesColors;
 
-    const { getByTestId } = render(
-      <PokemonFrame isLoading={false} id={25} types={types} />
-    );
+      const { getByTestId } = render(
+        <PokemonFrame isLoading={false} id={25} types={types} />
+      );
 
-    const firstTypeBg = getByTestId(PokemonFrameTestIds.firstTypeBackground);
-    const firstBgStyles = window.getComputedStyle(firstTypeBg);
+      const firstTypeBgComponent = getByTestId(
+        PokemonFrameTestIds.firstTypeBackground
+      );
+      const secondTypeBgComponent = getByTestId(
+        PokemonFrameTestIds.secondTypeBackground
+      );
 
-    const secondTypeBg = getByTestId(PokemonFrameTestIds.secondTypeBackground);
+      const { backgroundColor: firstBgColor } =
+        window.getComputedStyle(firstTypeBgComponent);
+      const { backgroundColor: secondBgColor } = window.getComputedStyle(
+        secondTypeBgComponent
+      );
 
-    const secondBgStyles = window.getComputedStyle(secondTypeBg);
+      expect(firstBgColor).toBe(hexToRGB(electricColor));
+      expect(secondBgColor).toBe(hexToRGB(poisonColor));
+    });
 
-    expect(firstBgStyles.backgroundColor).toBe(electricColor);
-    expect(secondBgStyles.backgroundColor).toBe(poisonColor);
+    it("Should render background with single color / single type", () => {
+      const types: PokemonTypes[] = ["electric"];
+
+      const { electric: electricColor } = pokemonTypesColors;
+
+      const { getByTestId } = render(
+        <PokemonFrame isLoading={false} id={25} types={types} />
+      );
+
+      const firstTypeBgComponent = getByTestId(
+        PokemonFrameTestIds.firstTypeBackground
+      );
+      const secondTypeBgComponent = getByTestId(
+        PokemonFrameTestIds.secondTypeBackground
+      );
+
+      const { backgroundColor: firstBgColor } =
+        window.getComputedStyle(firstTypeBgComponent);
+      const { backgroundColor: secondBgColor } = window.getComputedStyle(
+        secondTypeBgComponent
+      );
+
+      const rgbElectricColor = hexToRGB(electricColor);
+
+      expect(firstBgColor).toBe(rgbElectricColor);
+      expect(secondBgColor).toBe(rgbElectricColor);
+    });
+  });
+
+  describe("Placeholder Image", () => {
+    it("Should display loading placeholder image only while loading", () => {
+      const types: PokemonTypes[] = ["electric"];
+
+      const firstRender = render(
+        <PokemonFrame isLoading={true} id={25} types={types} />
+      );
+
+      const firstLoadingPlaceholder = firstRender.getByTestId(
+        PokemonFrameTestIds.loadingPlaceholderImg
+      );
+
+      expect(firstLoadingPlaceholder).toBeTruthy();
+
+      cleanup();
+
+      const secondRender = render(
+        <PokemonFrame isLoading={false} id={25} types={types} />
+      );
+
+      const [secondLoadingPlaceholder] = secondRender.queryAllByTestId(
+        PokemonFrameTestIds.loadingPlaceholderImg
+      );
+
+      expect(secondLoadingPlaceholder).toBeUndefined();
+    });
   });
 });
