@@ -29,7 +29,17 @@ export const TypesBackgroundsContainer = styled.div`
 
   z-index: 2;
 
-  transform: rotate(135deg);
+  animation: spin 2500ms ease-in-out infinite forwards;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 interface ITypesBgProps {
