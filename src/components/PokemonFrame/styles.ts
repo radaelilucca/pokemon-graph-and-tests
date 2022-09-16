@@ -13,13 +13,11 @@ export const Container = styled.div`
 
   background-color: white;
 
-  border: 2px solid #2de4a1;
-
   img {
     z-index: 3;
-    height: 220px;
-    width: 220px;
-    padding: 1.2rem;
+    height: 240px;
+    width: 240px;
+    padding: 2.2rem;
   }
 `;
 
@@ -62,4 +60,16 @@ export const SecondTypeBackground = styled(TypesBackground)`
   width: 100%;
 
   background-color: ${({ backgroundColor }) => backgroundColor};
+`;
+
+export const DarkBackground = styled.div`
+  background: #12111e;
+
+  position: absolute;
+  height: 92%;
+  width: 92%;
+
+  z-index: 2;
+
+  border-radius: 50%;
 `;

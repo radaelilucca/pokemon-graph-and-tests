@@ -4,6 +4,7 @@ import { PokemonTypes } from "../../state";
 import { ConditionalRender } from "../ConditionalRenderer";
 import {
   Container,
+  DarkBackground,
   FirstTypeBackground,
   SecondTypeBackground,
   TypesBackgroundsContainer,
@@ -19,6 +20,7 @@ export const PokemonFrameTestIds = {
   container: "PokemonFrameContainer",
   firstTypeBackground: "PokemonFrameFirstBackground",
   secondTypeBackground: "PokemonFrameSecondBackground",
+  loadingPlaceholderImg: "loadingPlaceholderImgImg",
 };
 
 const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
@@ -48,6 +50,8 @@ const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
           backgroundColor={backgroundColors[1] || backgroundColors[0]}
         />
       </TypesBackgroundsContainer>
+
+      <DarkBackground />
       <ConditionalRender condition={!isLoading}>
         <img
           ref={imageRef}
@@ -56,7 +60,10 @@ const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
       </ConditionalRender>
 
       <ConditionalRender condition={isLoading}>
-        <img src="/images/pikachu.png" />
+        <img
+          src="/images/pikachu.png"
+          data-testid={PokemonFrameTestIds.loadingPlaceholderImg}
+        />
       </ConditionalRender>
     </Container>
   );
