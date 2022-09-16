@@ -8,7 +8,7 @@
 
 [🎮 The project](#-the-project) &emsp;|&emsp;
 [🧰 Tech stack](#-tech-stack) &emsp;|&emsp;
-[➕ Contributing](#-contributing) &emsp;|&emsp;
+[➕ Contributing](#-contributing) &emsp;
 
 </div>
 
@@ -31,14 +31,11 @@ You can try the live version here: [pokemon.radaeli.dev](https://pokemon.radaeli
 <a href="https://vitejs.dev/">
   <img width="64" height="64" src="/assets/icons/vite.png" alt="Vite logo"/>
 </a>
-<a href="https://graphql.org/">
-  <img width="64" height="64" src="/assets/icons/grapql.png" alt="GraphQL logo"/>
-</a>
 <a href="https://styled-components.com/">
   <img width="64" height="64" src="/assets/icons/styled.png" alt="Styled Components logo"/>
 </a>
 <a href="https://redux.js.org/">
-  <img width="64" height="64" src="/assets/icons/recoil.png" alt="Recoil logo"/>
+  <img width="64" height="64" src="/assets/icons/redux.png" alt="Recoil logo"/>
 </a>
 <a href="https://jestjs.io/">
   <img width="64" height="64" src="/assets/icons/jest.png" alt="Jest logo"/>
