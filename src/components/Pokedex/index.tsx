@@ -1,12 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { AppDispatch, getRandomPokemon, RootState } from "../../state";
+import { colors } from "../../const";
+import { AppDispatch, getPokemon, RootState } from "../../state";
 import { Loading } from "../Loading";
 import { PokemonFrame } from "../PokemonFrame";
-import { Container, PokedexFooter } from "./styles";
+import { PokemonSearchBar } from "../PokemonSearchBar";
+import { Container, Footer, SearchBarContainer } from "./styles";
 
 const Pokedex = () => {
-  const { pokemon, isLoading } = useSelector(
+  const { pokemon, isLoading, error } = useSelector(
     (state: RootState) => state.pokemonState
   );
 
@@ -17,16 +19,23 @@ const Pokedex = () => {
       <Loading />
       <PokemonFrame
         isLoading={isLoading}
+        hasErrors={!!error}
         id={pokemon.id}
         types={pokemon.types}
       />
 
-      <PokedexFooter>
-        <strong>{pokemon.name}</strong>
-        <span>#{pokemon.id}</span>
+      <Footer hasErrors={!!error}>
+        <SearchBarContainer>
+          <PokemonSearchBar />
+        </SearchBarContainer>
 
-        <button onClick={() => dispatch(getRandomPokemon())}>Random</button>
-      </PokedexFooter>
+        <strong style={{ color: error && colors.error }}>
+          {error ? "not found" : pokemon.name}
+        </strong>
+        <span>#{error ? "error" : pokemon.id}</span>
+
+        <button onClick={() => dispatch(getPokemon({}))}>Random</button>
+      </Footer>
     </Container>
   );
 };

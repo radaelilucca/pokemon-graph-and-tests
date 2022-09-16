@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../const";
 
 export const Container = styled.div`
   background: #161526;
@@ -19,37 +20,60 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const PokedexFooter = styled.footer`
+export const SearchBarContainer = styled.div`
+  position: absolute;
+
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+
+  z-index: 10;
+`;
+
+interface IFooterProps {
+  hasErrors?: boolean;
+}
+export const Footer = styled.footer<IFooterProps>`
   bottom: 0;
+
+  margin-top: auto;
+
+  position: relative;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  height: 40%;
   width: 100%;
 
   padding: 1rem;
+  padding-top: 3.5rem;
 
   background: rgba(0, 0, 0, 0.2);
 
   strong {
     font-size: 2rem;
-    color: #2de4a1;
+
+    margin-top: 0.5rem;
   }
 
   span {
     position: absolute;
-    color: #2de4a1;
+
     bottom: 1rem;
     right: 1rem;
   }
 
-  button {
+  span,
+  strong {
+    color: ${({ hasErrors }) => (hasErrors ? colors.error : "#2de4a1")};
+  }
+
+  & > button {
     background: #4e8ed3;
     border: none;
     width: 200px;
-    margin-top: auto;
+    margin-top: 1.5rem;
     height: 50px;
     border-radius: 0.5rem;
 
