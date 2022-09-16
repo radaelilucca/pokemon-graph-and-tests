@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { pokemonTypesColors } from "../../const";
+import { colors, pokemonTypesColors } from "../../const";
 import { PokemonTypes } from "../../state";
 import { ConditionalRender } from "../ConditionalRenderer";
 import {
@@ -14,6 +14,7 @@ interface IPokemonFrameProps {
   id: number;
   types: PokemonTypes[];
   isLoading: boolean;
+  hasErrors?: boolean;
 }
 
 export const PokemonFrameTestIds = {
@@ -23,7 +24,12 @@ export const PokemonFrameTestIds = {
   loadingPlaceholderImg: "loadingPlaceholderImgImg",
 };
 
-const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
+const PokemonFrame = ({
+  id,
+  types = [],
+  isLoading,
+  hasErrors,
+}: IPokemonFrameProps) => {
   const backgroundColors = types
     .slice(0, 2)
     .map((typeItem) => pokemonTypesColors[typeItem] || "white");
@@ -43,23 +49,27 @@ const PokemonFrame = ({ id, types = [], isLoading }: IPokemonFrameProps) => {
       <TypesBackgroundsContainer>
         <FirstTypeBackground
           data-testid={PokemonFrameTestIds.firstTypeBackground}
-          backgroundColor={backgroundColors[0]}
+          backgroundColor={hasErrors ? colors.error : backgroundColors[0]}
         />
         <SecondTypeBackground
           data-testid={PokemonFrameTestIds.secondTypeBackground}
-          backgroundColor={backgroundColors[1] || backgroundColors[0]}
+          backgroundColor={
+            hasErrors
+              ? colors.error
+              : backgroundColors[1] || backgroundColors[0]
+          }
         />
       </TypesBackgroundsContainer>
 
       <DarkBackground />
-      <ConditionalRender condition={!isLoading}>
+      <ConditionalRender condition={!isLoading && !hasErrors}>
         <img
           ref={imageRef}
           src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${parsedId}.png`}
         />
       </ConditionalRender>
 
-      <ConditionalRender condition={isLoading}>
+      <ConditionalRender condition={isLoading || hasErrors}>
         <img
           src="/images/pikachu.png"
           data-testid={PokemonFrameTestIds.loadingPlaceholderImg}
