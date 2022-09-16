@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+interface IContainerProps {
+  hasErrors?: boolean;
+}
+export const Container = styled.div<IContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,6 +21,23 @@ export const Container = styled.div`
     height: 240px;
     width: 240px;
     padding: 2.2rem;
+
+    animation: ${({ hasErrors }) =>
+      hasErrors ? "none" : "float 3000ms ease-out infinite"};
+
+    @keyframes float {
+      0% {
+        transform: none;
+      }
+
+      50% {
+        transform: translateY(-1.05rem);
+      }
+
+      100% {
+        transform: none;
+      }
+    }
   }
 `;
 

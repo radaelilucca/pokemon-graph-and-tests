@@ -45,7 +45,10 @@ const PokemonFrame = ({
   }, [isLoading]);
 
   return (
-    <Container data-testid={PokemonFrameTestIds.container}>
+    <Container
+      data-testid={PokemonFrameTestIds.container}
+      hasErrors={hasErrors}
+    >
       <TypesBackgroundsContainer>
         <FirstTypeBackground
           data-testid={PokemonFrameTestIds.firstTypeBackground}
